@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments :: head"></head>
+<body>
+
+<div th:replace="fragments :: header"></div>
+
+<div class="container mt-4">
+    <h2 class="text-center">Danh sách Dự án</h2>
+
+    <!-- Form tìm kiếm -->
+    <form th:action="@{/projects}" method="get" class="row g-3">
+        <div class="col-md-4">
+            <label for="projectName" class="form-label">Tên dự án</label>
+            <input type="text" class="form-control" id="projectName" name="projectName" th:value="${projectName}">
+        </div>
+        <div class="col-md-4">
+            <label for="difficulty" class="form-label">Độ khó</label>
+            <select class="form-control" id="difficulty" name="difficulty">
+                <option value="">Tất cả</option>
+                <option value="Dễ" th:selected="${difficulty == 'Dễ'}">Dễ</option>
+                <option value="Trung bình" th:selected="${difficulty == 'Trung bình'}">Trung bình</option>
+                <option value="Khó" th:selected="${difficulty == 'Khó'}">Khó</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="departmentId" class="form-label">Phòng ban</label>
+            <select class="form-select" id="departmentId" name="departmentId">
+                <option value="">Tất cả</option>
+                <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.departmentName}" th:selected="${departmentId == dept.id}"></option>
+            </select>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a class="btn btn-secondary ms-2" th:href="@{/projects}">Reset</a>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Dự án</th>
+            <th>Độ Khó</th>
+            <th>Phòng Ban</th>
+            <th>Ngày Tạo</th>
+            <th>Ngày Cập Nhật</th>
+            <th>Version</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}">
+            <td th:text="${project.id}"></td>
+            <td th:text="${project.projectName}"></td>
+            <td th:text="${project.difficulty}"></td>
+<!--            <td th:text="${project.department.departmentName}"></td>-->
+            <td th:text="${project.department != null ? project.department.departmentName : 'Không có'}"></td>
+            <td th:text="${#temporals.format(project.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${#temporals.format(project.updatedAt, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${project.version}"></td>
+            <td>
+                <!-- Chỉ ADMIN mới có thể Sửa & Xóa -->
+                <a class="btn btn-warning btn-sm" th:href="@{/projects/update/{id}(id=${project.id})}" sec:authorize="hasRole('ADMIN')">Sửa</a>
+                <a class="btn btn-danger btn-sm" th:href="@{/projects/delete/confirm/{id}(id=${project.id})}" sec:authorize="hasRole('ADMIN')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/projects(page=${currentPage - 1}, projectName=${projectName}, difficulty=${difficulty}, departmentId=${departmentId})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${currentPage == i ? 'active' : ''}">
+                <a class="page-link" th:href="@{/projects(page=${i}, projectName=${projectName}, difficulty=${difficulty}, departmentId=${departmentId})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{/projects(page=${currentPage + 1}, projectName=${projectName}, difficulty=${difficulty}, departmentId=${departmentId})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="mt-3 d-flex justify-content-end gap-3">
+        <!-- Chỉ hiển thị nút "Thêm Dự án" nếu là ADMIN -->
+        <a class="btn btn-primary" th:href="@{/projects/create}" sec:authorize="hasRole('ADMIN')">Thêm Dự án</a>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-danger">Đăng xuất</button>
+        </form>
+    </div>
+</div>
+
+<div th:replace="fragments :: footer"></div>
+
+</body>
+</html>
