@@ -19,7 +19,7 @@
         <input type="hidden" th:field="*{projectName}" />
         <input type="hidden" th:field="*{difficulty}" />
         <input type="hidden" th:field="*{version}" />
-        <input type="hidden" th:field="*{departmentId}" />
+        <input type="hidden" th:field="*{department.id}" />
 
         <button type="submit" class="btn btn-primary">Xác nhận Lưu</button>
         <a class="btn btn-secondary" th:href="@{/projects/create}">Quay lại</a>

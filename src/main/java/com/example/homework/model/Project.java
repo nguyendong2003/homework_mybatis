@@ -9,7 +9,6 @@ public class Project {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Double version;
-    private Integer departmentId;
     private Department department;
 
     public Integer getId() {
@@ -58,14 +57,6 @@ public class Project {
 
     public void setVersion(Double version) {
         this.version = version;
-    }
-
-    public Integer getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Integer departmentId) {
-        this.departmentId = departmentId;
     }
 
     public Department getDepartment() {

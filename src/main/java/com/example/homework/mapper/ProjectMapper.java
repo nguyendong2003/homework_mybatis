@@ -15,7 +15,6 @@ public interface ProjectMapper {
             @Result(property = "createdAt", column = "created_at"),
             @Result(property = "updatedAt", column = "updated_at"),
             @Result(property = "version", column = "version"),
-            @Result(property = "departmentId", column = "department_id"),
             @Result(property = "department.id", column = "department_id"),
             @Result(property = "department.departmentName", column = "department_name")
     })
@@ -24,7 +23,7 @@ public interface ProjectMapper {
     @Select("SELECT * FROM project")
     List<Project> getAllProjects();
 
-    @Insert("INSERT INTO project (project_name, difficulty, version, department_id) VALUES (#{projectName}, #{difficulty}, #{version}, #{department.id})")
+    @Insert("INSERT INTO project (id, project_name, difficulty, version, department_id) VALUES (#{id}, #{projectName}, #{difficulty}, #{version}, #{department.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void createProject(Project project);
 

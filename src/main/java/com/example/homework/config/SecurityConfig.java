@@ -48,9 +48,6 @@ public class SecurityConfig {
                         .rememberMeCookieName("remember-me")
                         .tokenValiditySeconds(86400)
                         .userDetailsService(userDetailsService)
-                )
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/error/403")
                 );
 
         return http.build();

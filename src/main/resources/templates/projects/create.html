@@ -49,10 +49,10 @@
 
         <div class="form-group mb-3">
             <label>Phòng Ban:</label>
-            <select class="form-control" th:field="*{departmentId}">
+            <select class="form-control" th:field="*{department.id}">
                 <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.departmentName}"></option>
             </select>
-            <div class="text-danger" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></div>
+            <div class="text-danger" th:if="${#fields.hasErrors('department.id')}" th:errors="*{department.id}"></div>
         </div>
 
         <button type="submit" class="btn btn-success">Tạo mới</button>

@@ -66,11 +66,16 @@ public class ProjectController {
             return "projects/create";
         }
 
-        // Chỗ này để hiển thị ra tên phòng ban trong confirm
-        if (project.getDepartment() != null && project.getDepartment().getId() != null) {
+        if(project.getDepartment().getId() != null) {
             Department department = departmentService.getDepartmentById(project.getDepartment().getId());
             project.setDepartment(department);
         }
+
+        // Chỗ này để hiển thị ra tên phòng ban trong confirm
+//        if (project.getDepartment() != null && project.getDepartment().getId() != null) {
+//            Department department = departmentService.getDepartmentById(project.getDepartment().getId());
+//            project.setDepartment(department);
+//        }
 
         model.addAttribute("project", project);
         return "projects/confirm-create";
@@ -113,6 +118,11 @@ public class ProjectController {
         if (result.hasErrors()) {
             model.addAttribute("departments", departmentService.getAllDepartments());
             return "projects/update";
+        }
+
+        if(project.getDepartment().getId() != null) {
+            Department department = departmentService.getDepartmentById(project.getDepartment().getId());
+            project.setDepartment(department);
         }
 
 //        if (project.getDepartmentId() != null) {
